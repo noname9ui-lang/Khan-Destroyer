@@ -1,18 +1,17 @@
 # Khan Destroyer
+ <a href="#"><img src="https://komarev.com/ghpvc/?username=tskbrasil&style=for-the-badge&label=Views:&color=ff69b4"/></a>
+
 **O Khan Destroyer é a ferramenta definitiva para acabar com seus problemas no Khan Academy!**
 
 **Desenvolvidor por: [! im Snow](https://guns.lol/imsnow)&[iUnknowBr](https://guns.lol/iunknownbr)**
 
 # NOSSO DISCORD!
-# [CLIQUE AQUI!](https://discord.gg/dYPTHsAgSy)
+[![Discord](https://img.shields.io/badge/Discord-Join%20Us-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/DWKb32QKkJ)
 
 # Recursos
 ✅ _Automatizar respostas e poupar tempo!_
-
 ✅ _Resolver exercícios com precisão em segundos!_
-
 ✅ _Avançar rapidamente nos módulos sem esforço!_
-
 ✅ _Maximizar sua produtividade sem complicações!_
 
 # Instruções
