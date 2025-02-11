@@ -8,8 +8,11 @@
 
 # Recursos
 ✅ _Automatizar respostas e poupar tempo!_
+
 ✅ _Resolver exercícios com precisão em segundos!_
+
 ✅ _Avançar rapidamente nos módulos sem esforço!_
+
 ✅ _Maximizar sua produtividade sem complicações!_
 
 # Instruções
