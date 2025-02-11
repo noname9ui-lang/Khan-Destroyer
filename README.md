@@ -4,7 +4,7 @@
 **Desenvolvidor por: [! im Snow](https://guns.lol/imsnow)&[iUnknowBr](https://guns.lol/iunknownbr)**
 
 # NOSSO DISCORD!
-[CLIQUE AQUI!](https://discord.gg/dYPTHsAgSy)
+# [CLIQUE AQUI!](https://discord.gg/dYPTHsAgSy)
 
 # Recursos
 ✅ _Automatizar respostas e poupar tempo!_
