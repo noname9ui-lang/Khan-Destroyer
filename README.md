@@ -1,7 +1,7 @@
 # Khan Destroyer
 **O Khan Destroyer é a ferramenta definitiva para acabar com seus problemas no Khan Academy!**
 
-**Desenvolvidor por: [! im Snow](306067032913477634)&[iUnknowBr](597913546239508490)**
+**Desenvolvidor por: [! im Snow](https://guns.lol/imsnow)&[iUnknowBr](https://guns.lol/iunknownbr)**
 
 # NOSSO DISCORD!
 [CLIQUE AQUI!](https://discord.gg/dYPTHsAgSy)
