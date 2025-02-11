@@ -32,4 +32,3 @@ O uso em servidores de terceiros é proibido sem autorização prévia.
  Para permissões e dúvidas, entre em contato antes de qualquer implementação.**
 
 
-https://tenor.com/view/cat-dance-dancing-cat-chinese-dancing-cat-funny-cat-meme-cat-gif-18059553370350307210
