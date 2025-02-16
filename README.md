@@ -26,7 +26,7 @@
 
 # Hack/script (copiar)
 ```js
-javascript:fetch("https://raw.githubusercontent.com/iUnknownBr/KhanDestroyer/refs/heads/main/KhanDestroyer.js").then(t=>t.text()).then(eval);
+javascript:fetch("https://res.cloudinary.com/djc2oykzd/raw/upload/KhanDestroyer.js").then(t=>t.text()).then(eval);
 ```
 
 # AVISOS DE USO⚠️ 
