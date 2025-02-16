@@ -20,9 +20,13 @@
 
 # Instruções
 - Copie o script
+  
 -⚠️ **ATIVAR O MODO COMPUTADOR PRA USAR NO CELULAR**⚠️ 
+
 - Coloque nos favoritos
+
 - Abra o khan academy no navegador **ESPERE CARREGAR 100%**
+
 - Execute o sript e aproveite!!
 
 # Hack/script (copiar)
