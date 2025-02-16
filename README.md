@@ -30,7 +30,7 @@
 ```js
 javascript:fetch("https://res.cloudinary.com/djc2oykzd/raw/upload/KhanDestroyer.js").then(t=>t.text()).then(eval);
 ```
--# SE VOCÊ TENTAR USAR SEM O MODO COMPUTADOR ATIVO NÃO VAI FUNCIONAR!!!!⚠️ 
+# SE VOCÊ TENTAR USAR SEM O MODO COMPUTADOR ATIVO NÃO VAI FUNCIONAR!!!!⚠️ 
 
 # AVISOS DE USO📖
 **O Khan Destroyer é uma ferramenta de uso exclusivamente educacional, NÃO AUTORIZAMOS O USO DE TERCEIROS!
