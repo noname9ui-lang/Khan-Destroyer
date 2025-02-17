@@ -29,6 +29,9 @@
 
 - Execute o sript e aproveite!!
 
+# TUTORIAL🎥
+**https://youtu.be/7LsXym8cR2I?si=KFdFucfcf4LTiLj6**
+
 # Hack/script (copiar)
 ⚠️ **ATIVAR O MODO COMPUTADOR PRA USAR NO CELULAR**⚠️ 
 ```js
