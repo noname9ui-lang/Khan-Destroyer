@@ -1,4 +1,4 @@
-<a href="#"><img width="100%" src="https://capsule-render.vercel.app/api?type=waving&height=150&color=9B1C31&text=KHAN-DESTROYER&fontColor=00ff00&fontAlign=50&fontAlignY=30&fontSize=35"/></a>
+<a href="#"><img width="100%" src="https://capsule-render.vercel.app/api?type=waving&height=150&color=00FF00&text=KHAN-DESTROYER&fontColor=000000&fontAlign=50&fontAlignY=30&fontSize=35"/></a>
 
 # Khan Destroyer
  <a href="#"><img src="https://komarev.com/ghpvc/?username=tskbrasil&style=for-the-badge&label=Views:&color=ff69b4"/></a>
