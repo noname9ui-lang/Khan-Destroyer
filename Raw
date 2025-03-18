@@ -195,7 +195,7 @@ async function showSplashScreen() {
         font-size: 30px;
         text-align: center;
     `;
-    splashScreen.innerHTML = '<span style="color:white;">KHAN DESTROYER</span><span style="color:#00ff00;">.SPACE</span>';
+    splashScreen.innerHTML = '<span style="color:white;">KHAN </span><span style="color:#00ff00;">DESTROYER</span>';
     document.body.appendChild(splashScreen);
     setTimeout(() => splashScreen.style.opacity = '1', 10);
 
