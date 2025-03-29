@@ -41,10 +41,5 @@ javascript:fetch("https://raw.githubusercontent.com/Snowxyrzk/Khan-Destroyer/ref
 ```
 # SE VOCÊ TENTAR USAR SEM O MODO COMPUTADOR ATIVO NÃO VAI FUNCIONAR!!!!⚠️ 
 
-# AVISOS DE USO📖
-**O Khan Destroyer é uma ferramenta de uso exclusivamente educacional, NÃO AUTORIZAMOS O USO DE TERCEIROS!
-Não é permitido utilizá-lo para fins indevidos ou fraudulentos OU LUCRATIVOS.
-O uso em servidores de terceiros é proibido sem autorização prévia.
- Para permissões e dúvidas, entre em contato antes de qualquer implementação.**
 
 
