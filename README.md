@@ -4,8 +4,7 @@
 
 **O Khan Destroyer é a ferramenta definitiva para acabar com seus problemas no Khan Academy!**
 
-**Desenvolvidor por: [! im Snow](https://guns.lol/imsnow)&[iUnknowBr](https://guns.lol/iunknownbr)**
-muitas das ideias e partes do codigo foram retirado do [Khanware](https://khanware.space/) desenvolvido por [nix](https://e-z.bio/sounix).
+**Desenvolvidor por: [! im Snow](https://guns.lol/imsnow)***
 
 # NOSSO DISCORD!
 [![Discord](https://img.shields.io/badge/Discord-Join%20Us-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/gamesdest)
@@ -41,10 +40,3 @@ muitas das ideias e partes do codigo foram retirado do [Khanware](https://khanwa
 javascript:fetch("https://raw.githubusercontent.com/Snowxyrzk/Khan-Destroyer/refs/heads/main/SCRIPT.js").then(t=>t.text()).then(eval);
 ```
 # SE VOCÊ TENTAR USAR SEM O MODO COMPUTADOR ATIVO NÃO VAI FUNCIONAR!!!!⚠️ 
-
-# Direitos autorais (C) 2024 Nix
-
-Este programa é software livre; você pode redistribuí-lo e/ou modificá-lo sob os termos da Licença Pública Geral GNU, conforme publicado pela Free Software Foundation, seja versão 3 da Licença, ou (a seu critério) qualquer versão posterior. Este programa é distribuído na esperança de que seja útil, mas SEM QUALQUER GARANTIA; sem mesmo a garantia implícita de MERCHANTABILITY ou FITNESS PARA UM PROPÓSITO PARTICULAR. Veja a Licença Pública Geral GNU para mais detalhes. Você deve ter recebido uma cópia da Licença Pública Geral GNU junto com este programa. Se não, veja https://www.gnu.org/licenses/.
-
-
-
