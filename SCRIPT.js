@@ -1,299 +1,497 @@
-const ver = "V3.0.5";
-
-// Configurações de atraso para as funcionalidades
-const featureConfigs = {
-    initialDelay: 3000,
-    subsequentDelays: [300, 1500, 500, 2000]
+const APP = {
+  ver: "1.2.0",
+  user: {
+    id: 0
+  },
+  cfg: {
+    mod: true,
+    auto: false,
+    questionSpoof: true,
+    darkMode: true,
+    autoSpeed: 750,
+    speedOptions: [750, 1000, 1250, 1500]
+  }
 };
 
-// Configurações das funcionalidades
-window.features = {
-    autoAnswer: false,
-    questionSpoof: true
-};
-
-// Função para criar um delay
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-// Função para reproduzir áudio
-const playAudio = url => {
-    const audio = new Audio(url);
-    audio.play();
-};
-
-// Função para exibir um toast (notificação)
-function sendToast(text, duration = 5000, gravity = 'bottom', imageUrl = null, fontSize = '16px', fontFamily = 'Arial, sans-serif', color = '#ffffff') {
-    const toast = Toastify({
-        text: text,
-        duration: duration,
-        gravity: gravity,
-        position: "center",
-        stopOnFocus: true,
-        style: {
-            background: "#000000",
-            fontSize: fontSize,
-            fontFamily: fontFamily,
-            color: color,
-            padding: '10px 20px',
-            borderRadius: '5px',
-            display: 'flex',
-            alignItems: 'center'
-        }
-    });
-
-    if (imageUrl) {
-        const img = document.createElement('img');
-        img.src = imageUrl;
-        img.style.width = '20px';
-        img.style.height = '20px';
-        img.style.marginRight = '10px';
-        toast.toastElement.prepend(img);
-    }
-
-    toast.showToast();
+// Load external libraries
+async function loadScript(url) {
+  const response = await fetch(url);
+  const script = await response.text();
+  eval(script);
 }
 
-// Função para encontrar e clicar em um elemento por classe
-function findAndClickByClass(className) {
-    const element = document.getElementsByClassName(className)[0];
-    if (element) {
-        element.click();
-        if (element.textContent === 'Mostrar resumo') {
-            sendToast("🎉 Exercício concluido!", 3000);
-            playAudio('https://r2.e-z.host/4d0a0bea-60f8-44d6-9e74-3032a64a9f32/4x5g14gj.wav');
-        }
-    }
-    return !!element;
-}
-
-// Função para carregar um script externo
-async function loadScript(url, label) {
-    return fetch(url)
-        .then(response => response.text())
-        .then(script => {
-            eval(script);
-        });
-}
-
-// Função para carregar um arquivo CSS externo
 async function loadCss(url) {
-    return new Promise((resolve) => {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.type = 'text/css';
-        link.href = url;
-        link.onload = () => resolve();
-        document.head.appendChild(link);
+  return new Promise(resolve => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.type = "text/css";
+    link.href = url;
+    link.onload = resolve;
+    document.head.appendChild(link);
+  });
+}
+
+// Toast notification function
+function sendToast(message, duration = 5000, position = "bottom") {
+  if (typeof Toastify !== 'undefined') {
+    Toastify({
+      text: message,
+      duration,
+      gravity: position,
+      position: "center",
+      stopOnFocus: true,
+      style: { background: "#000000" }
+    }).showToast();
+  } else {
+    console.log("Toast:", message);
+  }
+}
+
+// Audio player function
+const playAudio = src => {
+  new Audio(src).play();
+};
+
+class UI {
+  static init() {
+    const _0x3d849d = document.createElement("div");
+    _0x3d849d.id = "khanDestroyer-panel";
+    Object.assign(_0x3d849d.style, {
+      position: "fixed",
+      top: "10px",
+      right: "15px",
+      width: "200px",
+      background: "linear-gradient(145deg, #1a1a1a, #111)",
+      borderRadius: "12px",
+      display: "flex",
+      flexDirection: "column",
+      padding: "12px",
+      zIndex: "9999",
+      boxShadow: "0 4px 15px rgba(0,0,0,0.3)",
+      border: "1px solid #333",
+      maxWidth: "90%"
     });
-}
-
-// Função para modificar as questões (spoof)
-function spoofQuestion() {
-    const phrases = [
-        "🎮💣 Games Destroyer On Top[Discord](https://discord.gg/gamesdest)!",
-        "❓ Made by [@iUnknownBr](https://guns.lol/iunknownbr).",
-        "🏂 Made by [Snow](https://guns.lol/imsnow)"
-    ];
-
-    const originalFetch = window.fetch;
-    window.fetch = async function (input, init) {
-        let body;
-        if (input instanceof Request) body = await input.clone().text();
-        else if (init && init.body) body = init.body;
-
-        const originalResponse = await originalFetch.apply(this, arguments);
-        const clonedResponse = originalResponse.clone();
-
-        try {
-            const responseBody = await clonedResponse.text();
-            let responseObj = JSON.parse(responseBody);
-
-            if (responseObj?.data?.assessmentItem?.item?.itemData) {
-                let itemData = JSON.parse(responseObj.data.assessmentItem.item.itemData);
-
-                if (itemData.question.content[0] === itemData.question.content[0].toUpperCase()) {
-                    itemData.answerArea = {
-                        "calculator": false,
-                        "chi2Table": false,
-                        "periodicTable": false,
-                        "tTable": false,
-                        "zTable": false
-                    };
-
-                    itemData.question.content = phrases[Math.floor(Math.random() * phrases.length)] + `[[☃ radio 1]]`;
-                    itemData.question.widgets = {
-                        "radio 1": {
-                            options: {
-                                choices: [
-                                    { content: "Resposta correta.", correct: true },
-                                    { content: "Resposta Errada.", correct: false }
-                                ]
-                            }
-                        }
-                    };
-
-                    responseObj.data.assessmentItem.item.itemData = JSON.stringify(itemData);
-                    sendToast("🔓 Questão Bypased.", 1000);
-
-                    return new Response(JSON.stringify(responseObj), {
-                        status: originalResponse.status,
-                        statusText: originalResponse.statusText,
-                        headers: originalResponse.headers
-                    });
+    _0x3d849d.innerHTML = `
+            <style>
+                .khandestroyer-header {
+                    color: #fff;
+                    font-size: 18px;
+                    font-weight: bold;
+                    text-align: center;
+                    margin-bottom: 10px;
+                    padding-bottom: 10px;
+                    border-bottom: 1px solid #333;
+                    cursor: pointer;
+                    user-select: none;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                 }
-            }
-        } catch (e) {
-            console.error(e);
-        }
-
-        return originalResponse;
+                .khandestroyer-header:after {
+                    content: "▼";
+                    font-size: 12px;
+                    margin-left: 5px;
+                    transition: transform 0.3s ease;
+                }
+                .khandestroyer-header.collapsed:after {
+                    transform: rotate(-90deg);
+                }
+                .khandestroyer-content {
+                    transition: max-height 0.3s ease, opacity 0.3s ease;
+                    max-height: 500px;
+                    opacity: 1;
+                    overflow: hidden;
+                }
+                .khandestroyer-content.collapsed {
+                    max-height: 0;
+                    opacity: 0;
+                }
+                .khandestroyer-version {
+                    color: #666;
+                    font-size: 12px;
+                    font-weight: normal;
+                }
+                .khandestroyer-opt {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    color: #fff;
+                    padding: 8px;
+                    margin: 3px 0;
+                }
+                .switch {
+                    position: relative;
+                    display: inline-block;
+                    width: 44px;
+                    height: 22px;
+                }
+                .switch input {
+                    opacity: 0;
+                    width: 0;
+                    height: 0;
+                }
+                .slider {
+                    position: absolute;
+                    cursor: pointer;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: #333;
+                    transition: .4s;
+                    border-radius: 22px;
+                }
+                .slider:before {
+                    position: absolute;
+                    content: "";
+                    height: 18px;
+                    width: 18px;
+                    left: 2px;
+                    bottom: 2px;
+                    background-color: white;
+                    transition: .4s;
+                    border-radius: 50%;
+                }
+                input:checked + .slider {
+                    background: linear-gradient(145deg, #6200ea, #7c4dff);
+                }
+                input:checked + .slider:before {
+                    transform: translateX(22px);
+                }
+                .khandestroyer-credit {
+                    color: #666;
+                    font-size: 11px;
+                    text-align: center;
+                    margin-top: 10px;
+                    padding-top: 10px;
+                    border-top: 1px solid #333;
+                }
+                .speed-slider-container {
+                    width: 100%;
+                    margin-top: 5px;
+                    padding: 0 2px;
+                    box-sizing: border-box;
+                    overflow: visible;
+                }
+                .speed-slider {
+                    -webkit-appearance: none;
+                    width: 100%;
+                    height: 8px;
+                    border-radius: 5px;
+                    background: #333;
+                    outline: none;
+                    margin: 10px 0;
+                }
+                .speed-slider::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    appearance: none;
+                    width: 18px;
+                    height: 18px;
+                    border-radius: 50%;
+                    background: linear-gradient(145deg, #6200ea, #7c4dff);
+                    cursor: pointer;
+                }
+                .speed-slider::-moz-range-thumb {
+                    width: 18px;
+                    height: 18px;
+                    border-radius: 50%;
+                    background: linear-gradient(145deg, #6200ea, #7c4dff);
+                    cursor: pointer;
+                    border: none;
+                }
+                .speed-value {
+                    display: none;
+                }
+                /* Removendo as classes relacionadas às marcações de velocidade */
+                .speed-ticks {
+                    display: none;
+                }
+                .speed-tick {
+                    display: none;
+                }
+                .speed-ticks {
+                    padding: 0;
+                }
+                .speed-tick {
+                    font-size: 7px;
+                }
+                }
+            </style>
+            <div class="khandestroyer-header">
+                KhanDestroyer <span class="khandestroyer-version">${APP.ver}</span>
+            </div>
+            <div class="khandestroyer-content">
+                <div class="khandestroyer-opt">
+                    <span>Auto Complete</span>
+                    <label class="switch">
+                        <input type="checkbox" id="autoCheck">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="khandestroyer-opt">
+                    <span>Question Spoof</span>
+                    <label class="switch">
+                        <input type="checkbox" id="spoofCheck" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="khandestroyer-opt">
+                    <span>Dark Mode</span>
+                    <label class="switch">
+                        <input type="checkbox" id="darkModeCheck" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="khandestroyer-opt" id="speedControlContainer" style="display: none;">
+                    <span>Velocidade</span>
+                    <div style="width: 100%; display: flex; align-items: center; padding-left: 10px; box-sizing: border-box;">
+                        <div class="speed-slider-container">
+                            <input type="range" min="0" max="3" value="0" class="speed-slider" id="speedSlider">
+                            <div class="speed-value" id="speedValue" style="display: none;">750ms</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="khandestroyer-credit">by iUnknownBr</div>
+            </div>
+        `;
+    document.body.appendChild(_0x3d849d);
+    
+    // Adicionar evento de clique ao cabeçalho para encolher/expandir o menu
+    const header = document.querySelector('.khandestroyer-header');
+    const content = document.querySelector('.khandestroyer-content');
+    
+    header.addEventListener('click', () => {
+      header.classList.toggle('collapsed');
+      content.classList.toggle('collapsed');
+      
+      // Salvar o estado do menu no localStorage
+      const isCollapsed = header.classList.contains('collapsed');
+      localStorage.setItem('khanDestroyer-collapsed', isCollapsed);
+      
+      // Mostrar toast informativo
+      sendToast(isCollapsed ? "🔼 Menu recolhido" : "🔽 Menu expandido", 1000);
+    });
+    
+    // Verificar se o menu estava recolhido anteriormente
+    const wasCollapsed = localStorage.getItem('khanDestroyer-collapsed') === 'true';
+    if (wasCollapsed) {
+      header.classList.add('collapsed');
+      content.classList.add('collapsed');
+    }
+    
+    // Setup event listeners
+    document.getElementById("autoCheck").onchange = event => {
+      APP.cfg.auto = event.target.checked;
+      document.getElementById("speedControlContainer").style.display = APP.cfg.auto ? "flex" : "none";
+      sendToast(APP.cfg.auto ? "✅ Auto Complete Enabled" : "❌ Auto Complete Disabled", 2000);
     };
-}
+    
+    // Configurar o slider de velocidade
+    const speedSlider = document.getElementById("speedSlider");
+    const speedValue = document.getElementById("speedValue");
+    
+    // Definir o valor inicial do slider
+    const initialIndex = APP.cfg.speedOptions.indexOf(APP.cfg.autoSpeed);
+    speedSlider.value = initialIndex >= 0 ? initialIndex : 0;
+    
+    // Adicionar evento de mudança ao slider
+    speedSlider.oninput = () => {
+      const index = parseInt(speedSlider.value);
+      const speed = APP.cfg.speedOptions[index];
+      APP.cfg.autoSpeed = speed;
+      speedValue.textContent = speed + "ms";
+    };
+    
+    // Adicionar evento de mudança completa para mostrar toast
+    speedSlider.onchange = () => {
+      const index = parseInt(speedSlider.value);
+      const speed = APP.cfg.speedOptions[index];
+      sendToast(`⏱️ Velocidade alterada para ${speed}ms`, 2000);
+    };
 
-// Função para responder automaticamente às questões
-function autoAnswer() {
-    (async () => {
-        const baseClasses = ["_s6zfc1u", "_ssxvf9l", "_4i5p5ae", "_1r8cd7xe", "_1yok8f4"];
-
-        while (true) {
-            if (window.features.autoAnswer && window.features.questionSpoof) {
-                await delay(featureConfigs.initialDelay);
-
-                for (let i = 0; i < baseClasses.length; i++) {
-                    const clicked = findAndClickByClass(baseClasses[i]);
-                    if (clicked && i < baseClasses.length - 1) {
-                        const nextDelay = featureConfigs.subsequentDelays[i % featureConfigs.subsequentDelays.length];
-                        await delay(nextDelay);
-                    }
-                }
-            } else {
-                await delay(1000);
-            }
+    
+    document.getElementById("spoofCheck").onchange = event => {
+      APP.cfg.questionSpoof = event.target.checked;
+      sendToast(APP.cfg.questionSpoof ? "✅ Question Spoof Enabled" : "❌ Question Spoof Disabled", 2000);
+    };
+    
+    document.getElementById("darkModeCheck").onchange = event => {
+      APP.cfg.darkMode = event.target.checked;
+      if (typeof DarkReader !== 'undefined') {
+        if (APP.cfg.darkMode) {
+          DarkReader.enable();
+          sendToast("🌑 Dark Mode Enabled", 2000);
+        } else {
+          DarkReader.disable();
+          sendToast("☀️ Dark Mode Disabled", 2000);
         }
-    })();
+      } else {
+        console.error("DarkReader não está disponível");
+        sendToast("⚠️ Dark Mode não disponível. Recarregue a página.", 3000);
+      }
+    };
+    
+    // Ativar Dark Mode por padrão
+    if (APP.cfg.darkMode && typeof DarkReader !== 'undefined') {
+      DarkReader.enable();
+    }
+  }
 }
 
-// Função para exibir a tela de inicialização
-async function showSplashScreen() {
-    const splashScreen = document.createElement('div');
-    splashScreen.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: #000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-        opacity: 0;
-        transition: opacity 0.5s ease;
-        user-select: none;
-        color: white;
-        font-family: MuseoSans, sans-serif;
-        font-size: 30px;
-        text-align: center;
-    `;
-    splashScreen.innerHTML = '<span style="color:white;">KHAN </span><span style="color:#00ff00;">DESTROYER</span>';
-    document.body.appendChild(splashScreen);
-    setTimeout(() => splashScreen.style.opacity = '1', 10);
-
-    await delay(2000);
-    splashScreen.style.opacity = '0';
-    await delay(1000);
-    splashScreen.remove();
+class Core {
+  static init() {
+    // Inicialização sequencial das funcionalidades
+    this.setupMod();
+    this.setupAuto();
+  }
+  
+  static async loadExternalLibraries() {
+    try {
+      await loadCss("https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css");
+      await loadScript("https://cdn.jsdelivr.net/npm/toastify-js");
+      await loadScript("https://cdn.jsdelivr.net/npm/darkreader@4.9.92/darkreader.min.js");
+      
+      // Configurar o DarkReader após carregá-lo
+      if (typeof DarkReader !== 'undefined') {
+        DarkReader.setFetchMethod(window.fetch);
+        if (APP.cfg.darkMode) {
+          DarkReader.enable();
+        }
+      } else {
+        console.error("DarkReader não foi carregado corretamente");
+      }
+      
+      // Verificar se Toastify foi carregado antes de usar
+      if (typeof Toastify !== 'undefined') {
+        sendToast("🌿 Script loaded successfully!");
+      } else {
+        console.error("Toastify não foi carregado corretamente");
+      }
+      
+      console.clear();
+    } catch (error) {
+      console.error("Erro ao carregar bibliotecas externas:", error);
+    }
+  }
+  
+  static setupMod() {
+    const messages = [
+      "🔥 Games Destroyer On Top[Discord](https://discord.gg/gamesdest)!",
+      "🤍 Made by [@iUnknownBr](https://guns.lol/iunknownbr)."
+    ];
+    
+    const originalFetch = window.fetch;
+    window.fetch = async function (_0xb0b6f5, _0x45b6eb) {
+      const _0x238f50 = await originalFetch.apply(this, arguments);
+      const _0xc057f3 = _0x238f50.clone();
+      
+      try {
+        const _0x46e77b = await _0xc057f3.text();
+        let _0x3cbec8 = JSON.parse(_0x46e77b);
+        
+        if (_0x3cbec8?.data?.assessmentItem?.item?.itemData) {
+          let _0x3ca1c5 = JSON.parse(_0x3cbec8.data.assessmentItem.item.itemData);
+          
+          if (_0x3ca1c5.question.content[0] === _0x3ca1c5.question.content[0].toUpperCase() && APP.cfg.questionSpoof) {
+            _0x3ca1c5.answerArea = {
+              calculator: false
+            };
+            
+            _0x3ca1c5.question.content = messages[Math.floor(Math.random() * messages.length)] + "[[☃ radio 1]]";
+            _0x3ca1c5.question.widgets = {
+              "radio 1": {
+                type: "radio",
+                alignment: "default",
+                static: false,
+                graded: true,
+                options: {
+                  choices: [{
+                    content: "✅",
+                    correct: true
+                  }],
+                  randomize: false,
+                  multipleSelect: false,
+                  displayCount: null,
+                  hasNoneOfTheAbove: false,
+                  onePerLine: true,
+                  deselectEnabled: false
+                }
+              }
+            };
+            
+            _0x3cbec8.data.assessmentItem.item.itemData = JSON.stringify(_0x3ca1c5);
+            sendToast("🔓 Question Bypassed", 1000);
+            
+            const _0x1aa163 = {
+              status: _0x238f50.status,
+              statusText: _0x238f50.statusText,
+              headers: _0x238f50.headers
+            };
+            
+            return new Response(JSON.stringify(_0x3cbec8), _0x1aa163);
+          }
+        }
+      } catch (_0x2e758e) {}
+      
+      return _0x238f50;
+    };
+  }
+  
+  static async setupAuto() {
+    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+    const classNames = ["_1tuo6xk", "_ssxvf9l", "_1f0fvyce", "_rz7ls7u", "_1yok8f4", "_1e5cuk2a", "_s6zfc1u", "_4i5p5ae", "_1r8cd7xe"];
+    const checkAnswerSelector = "[data-testid=\"exercise-check-answer\"]";
+    
+    function findAndClickByClass(className) {
+      const element = document.getElementsByClassName(className)[0];
+      if (element) {
+        element.click();
+        if (element.textContent === "Mostrar resumo") {
+          sendToast("🎉 Exercise completed!", 3000);
+          playAudio("https://r2.e-z.host/4d0a0bea-60f8-44d6-9e74-3032a64a9f32/4x5g14gj.wav");
+        }
+      }
+      return !!element;
+    }
+    
+    // Função otimizada para processar elementos
+    async function processElements() {
+      if (!APP.cfg.auto) return;
+      
+      // Processar todos os botões de classe conhecida
+      for (const className of classNames) {
+        findAndClickByClass(className);
+        await delay(APP.cfg.autoSpeed / 5);
+      }
+      
+      // Verificar e clicar no botão de verificar resposta
+      const checkAnswerButton = document.querySelector(checkAnswerSelector);
+      if (checkAnswerButton) {
+        checkAnswerButton.click();
+        await delay(APP.cfg.autoSpeed / 5);
+      }
+    }
+    
+    // Loop principal otimizado
+    while (true) {
+      await processElements();
+      await delay(APP.cfg.autoSpeed / 3);
+    }
+  }
 }
 
-// Função para exibir o popup de doação
-function showDonationPopup() {
-    const popup = document.createElement('div');
-    popup.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: #1e1e1e;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px #00ff00;
-        z-index: 10000;
-        text-align: center;
-        color: white;
-        font-family: Arial, sans-serif;
-    `;
-    popup.innerHTML = `
-        <div style="position: absolute; top: 10px; right: 10px; cursor: pointer; color: red; font-size: 20px;" onclick="this.parentElement.remove(); showDiscordPopup();">×</div>
-        <img src="https://i.imgur.com/t4mfuJU.png" alt="Logo" style="width: 100px; height: 100px; margin-bottom: 10px;">
-        <h2 style="color: #00ff00; text-shadow: 0 0 5px #00ff00;">Contribua com o projeto</h2>
-        <p style="font-size: 14px;">Sua ajuda é necessária para manter e atualizar o projeto. Qualquer doação é bem-vinda!</p>
-        <button onclick="window.open('https://pixgg.com/im_snow', '_blank');" style="background-color: #00ff00; color: black; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px;">Doar</button>
-    `;
-    document.body.appendChild(popup);
+// Inicialização otimizada - primeiro carregamos as bibliotecas, depois inicializamos a UI e o Core
+async function initApp() {
+  try {
+    await Core.loadExternalLibraries();
+    UI.init();
+    Core.init();
+    console.log(`KhanDestroyer v${APP.ver} iniciado com sucesso!`);
+    sendToast(`🚀 KhanDestroyer v${APP.ver} iniciado!`, 3000);
+  } catch (error) {
+    console.error("Erro ao inicializar KhanDestroyer:", error);
+    sendToast("⚠️ Erro ao inicializar KhanDestroyer", 5000);
+  }
 }
 
-// Função para exibir o popup do Discord
-function showDiscordPopup() {
-    const popup = document.createElement('div');
-    popup.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: #1e1e1e;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px #00ff00;
-        z-index: 10000;
-        text-align: center;
-        color: white;
-        font-family: Arial, sans-serif;
-    `;
-    popup.innerHTML = `
-        <div style="position: absolute; top: 10px; right: 10px; cursor: pointer; color: red; font-size: 20px;" onclick="this.parentElement.remove();">×</div>
-        <img src="https://i.imgur.com/t4mfuJU.png" alt="Logo" style="width: 100px; height: 100px; margin-bottom: 10px;">
-        <h2 style="color: #00ff00; text-shadow: 0 0 5px #00ff00;">Entre no nosso servidor</h2>
-        <p style="font-size: 14px;">Junte-se à nossa comunidade no Discord para mais atualizações e suporte!</p>
-        <button onclick="window.open('https://discord.gg/gamesdest', '_blank');" style="background-color: #00ff00; color: black; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px;">Entrar no servidor</button>
-    `;
-    document.body.appendChild(popup);
-}
-
-// Verifica se o script está sendo executado no site correto
-if (!/^https?:\/\/pt\.khanacademy\.org/.test(window.location.href)) {
-    alert("❌ Khan Destroyer Failed to Injected!\n\nVocê precisa executar o Khan Destroyer no site do Khan Academy! (https://pt.khanacademy.org/)");
-    window.location.href = "https://pt.khanacademy.org/";
-}
-
-// Carrega o Dark Reader e ativa o modo escuro
-loadScript('https://cdn.jsdelivr.net/npm/darkreader@4.9.92/darkreader.min.js').then(async () => {
-    DarkReader.setFetchMethod(window.fetch);
-    DarkReader.enable();
-
-    // Exibe o aviso "HACK ATIVO ENTRE NA ATIVIDADE"
-    sendToast("HACK ATIVO ENTRE NA ATIVIDADE", 5000, 'top', null, '20px', 'Arial, sans-serif', '#00ff00');
-
-    // Aguarda 1 segundo antes de exibir o toast do Dark Mode
-    await delay(1000);
-
-    // Exibe o toast do Dark Mode com a imagem
-    sendToast("🌑 Dark Mode ativado!", 2000, 'bottom', 'https://cdn.discordapp.com/attachments/1326756804889280553/1351333793306247220/6c0df6a95ea7f835588f586a11bdbd4e.png?ex=67d9ff2a&is=67d8adaa&hm=1992d77fc05bd65a4417da3e860cead36b2d62395a28f1b6598d43a0ab953cc0&');
-});
-
-// Carrega o CSS do Toastify
-loadCss('https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css');
-
-// Carrega o Toastify e inicia as funcionalidades
-loadScript('https://cdn.jsdelivr.net/npm/toastify-js').then(async () => {
-    sendToast("🎮 Khan Destroyer injetado com sucesso!", 5000, 'bottom');
-    window.features.autoAnswer = true;
-    spoofQuestion();
-    autoAnswer();
-    console.clear();
-
-    // Exibe a tela de inicialização
-    await showSplashScreen();
-
-    // Exibe o popup de doação
-    showDonationPopup();
-});
+initApp();
