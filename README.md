@@ -40,3 +40,6 @@
 javascript:fetch("https://raw.githubusercontent.com/Snowxyrzk/Khan-Destroyer/refs/heads/main/SCRIPT.js").then(t=>t.text()).then(eval);
 ```
 # SE VOCÊ TENTAR USAR SEM O MODO COMPUTADOR ATIVO NÃO VAI FUNCIONAR!!!!⚠️ 
+
+<a href="#"><img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=00FF00&reversal=true&descSize=5&descAlign=0&descAlignY=34&section=footer&fontAlignY=2&fontAlign=0"/></a>
+
