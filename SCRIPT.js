@@ -251,7 +251,7 @@ class UI {
                         </div>
                     </div>
                 </div>
-                <div class="khandestroyer-credit">by iUnknownBr</div>
+                <div class="khandestroyer-credit">by ! Snow?</div>
             </div>
         `;
     document.body.appendChild(_0x3d849d);
