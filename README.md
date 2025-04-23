@@ -34,9 +34,9 @@ javascript:fetch("https://raw.githubusercontent.com/Snowxyrzk/Khan-Destroyer/ref
 </div>
 
 <p align="center">
-    <a href="https://discord.gg/centralscripts"><img width="7%" alt="Discord (CS)" title="Discord (GD)" src="https://i.imgur.com/r0YUgMR.png"/></a>
+    <a href="https://discord.gg/centralscripts"><img width="20%" alt="Discord (CS)" title="Discord (GD)" src="https://i.imgur.com/r0YUgMR.png"/></a>
   &nbsp;
-    <a href="https://pixgg.com/im_snow"><img width="7%" alt="Doar" title="Doar" src="https://i.imgur.com/yLUUqaa.png"/></a>
+    <a href="https://pixgg.com/im_snow"><img width="20%" alt="Doar" title="Doar" src="https://i.imgur.com/yLUUqaa.png"/></a>
 </p>
 
 
