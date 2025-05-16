@@ -9,7 +9,7 @@
 <h2 align="center"><strong>Khan Destroyer</strong></h2>
 
 <p align="center" style="font-size: 16px;">
-  O <strong>Khan Destroyer</strong> realiza automaticamente as <strong>atividades</strong> na plataforma <strong>Expansão Noturna</strong>, poupando seu tempo e esforço.
+  O <strong>Khan Destroyer</strong> realiza automaticamente as <strong>questões</strong> na plataforma <strong>Khan Academy</strong>, poupando seu tempo e esforço.
 </p>
 
 ---
@@ -46,10 +46,9 @@ javascript:fetch("https://raw.githubusercontent.com/Snowxyrzk/Khan-Destroyer/ref
 
 ---
 
-<!-- Créditos -->
 <div align="center">
-  <img src="https://i.imgur.com/CAqIV2G.png" width="150px" alt="Snow Profile"/>
-  <h3 style="color: #e86a04; animation: pulse 2s infinite;">Criado por Snow!</h3>
+  <img src="https://i.imgur.com/CHUfGIq.png" width="150px" alt="Snow Profile"/>
+  <h3 style="color: #e86a04; animation: pulse 2s infinite;">Criado por Central Scripts!</h3>
 </div>
 
 <a href="#"><img width="100%" src="https://capsule-render.vercel.app/api?type=waving&height=150&color=ffffff&section=footer"/></a>
