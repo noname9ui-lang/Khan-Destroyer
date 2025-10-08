@@ -182,7 +182,7 @@ function setupMain() {
           sendToast("🎉｜Exercise completed!", 3000);
         }
       }
-      await delay(1500); 
+      await delay(1000); 
     }
   })();
 }
