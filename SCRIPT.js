@@ -137,7 +137,7 @@ function setupMain() {
             zTable: false
           };
           
-          itemData.question.content = "Developed by: ! Snow?" + `[[☃ radio 1]]`;
+          itemData.question.content = "Question! Question?" + `[[☃ radio 1]]`;
           itemData.question.widgets = {
             "radio 1": {
               type: "radio",
