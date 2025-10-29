@@ -9,12 +9,12 @@
 <h2 align="center"><strong>Khan Destroyer</strong></h2>
 
 <p align="center" style="font-size: 16px;">
-  O <strong>Khan Destroyer</strong> realiza automaticamente as <strong>questões</strong> na plataforma <strong>Khan Academy</strong>, poupando seu tempo e esforço.
+  O <strong>Khan Destroyer</strong> Khan Destroyer automatically answers questions on the Khan Academy platform, saving you time and effort.
 </p>
 
 ---
 
-<p align="center"><strong>Para usar, copie o código abaixo:</strong></p>
+<p align="center"><strong>To use, copy the code below:</strong></p>
 
 <div align="center">
 
@@ -29,15 +29,7 @@ javascript:fetch("https://raw.githubusercontent.com/Snowxyrzk/Khan-Destroyer/ref
 ---
 
 ---
-<p align="center">
-<sub><i>clique abaixo para entrar no servidor do discord ou doar</i></sub>
-</div>
 
-<p align="center">
-    <a href="https://discord.gg/centralscripts"><img width="12%" alt="Discord (CS)" title="Discord (GD)" src="https://i.imgur.com/r0YUgMR.png"/></a>
-  &nbsp;
-    <a href="https://pixgg.com/im_snow"><img width="12%" alt="Doar" title="Doar" src="https://i.imgur.com/yLUUqaa.png"/></a>
-</p>
 
 
 <p align="center">
