@@ -10,7 +10,9 @@
 
 <p align="center" style="font-size: 16px;">
   O <strong>Khan Destroyer</strong> Khan Destroyer automatically answers questions on the Khan Academy platform, saving you time and effort.
-  O <strong>Khan Destroyer</strong> Use the original version here: https://github.com/Snowxyrzk/Khan-Destroyer
+</p>
+<p align="center" style="font-size: 16px;">
+  O Use the original version here: https://github.com/Snowxyrzk/Khan-Destroyer
 </p>
 
 ---
