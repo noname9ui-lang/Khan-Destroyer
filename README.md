@@ -28,6 +28,5 @@ javascript:fetch("https://raw.githubusercontent.com/Snowxyrzk/Khan-Destroyer/ref
 
 ---
 
----
 
 
