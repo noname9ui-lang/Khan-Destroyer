@@ -31,9 +31,3 @@ javascript:fetch("https://raw.githubusercontent.com/Snowxyrzk/Khan-Destroyer/ref
 ---
 
 
-
-<p align="center">
-  <a href="#"><img src="https://komarev.com/ghpvc/?username=khandestroyer&style=for-the-badge&label=Views:&color=gray"/></a>
-</p>
-
-<a href="#"><img width="100%" src="https://capsule-render.vercel.app/api?type=waving&height=150&color=ffffff&section=footer"/></a>
