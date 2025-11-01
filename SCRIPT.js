@@ -142,24 +142,120 @@ function setupMain() {
       if (responseObj?.data?.assessmentItem?.item?.itemData) {
         let itemData = JSON.parse(responseObj.data.assessmentItem.item.itemData);
 
-        if (itemData.question.content[0] === itemData.question.content[0].toUpperCase()) {
+        // try to get the actual question text (handle arrays or strings)
+        let originalQuestion = itemData?.question?.content;
+        let questionText = "";
+
+        try {
+          if (Array.isArray(originalQuestion)) {
+            // If content is array of strings/objects, try to join text parts
+            questionText = originalQuestion.map(part => {
+              if (typeof part === "string") return part;
+              // some content parts may be objects with text or html - attempt to stringify sensibly
+              if (part?.text) return part.text;
+              if (typeof part === "object") try { return JSON.stringify(part); } catch { return "";}
+              return "";
+            }).join(" ").trim();
+          } else if (typeof originalQuestion === "string") {
+            questionText = originalQuestion;
+          } else {
+            // fallback: try to stringify
+            questionText = JSON.stringify(originalQuestion || "").slice(0, 1000);
+          }
+        } catch (e) {
+          questionText = "Question";
+        }
+
+        // Only modify certain items (keep your previous uppercase check to limit changes)
+        if (questionText && questionText[0] === questionText[0].toUpperCase()) {
+
+          // Prepare choices array: attempt to reuse existing choices if available
+          let newChoices = [];
+          let usedCorrectIndex = -1;
+
+          try {
+            // detect existing widget choices
+            const widgets = itemData.question.widgets || {};
+            // try to find the first widget that looks like choices
+            const widgetKeys = Object.keys(widgets);
+            let foundChoices = null;
+            for (const k of widgetKeys) {
+              const w = widgets[k];
+              if (w?.options?.choices && Array.isArray(w.options.choices)) {
+                foundChoices = w.options.choices;
+                break;
+              }
+            }
+
+            if (foundChoices && foundChoices.length >= 1) {
+              // Use up to 4 existing choices, but transform text to "Wrong answer X" except preserve correctness label
+              for (let i = 0; i < 4; i++) {
+                const src = foundChoices[i];
+                if (src) {
+                  const text = (typeof src.content === "string") ? src.content : (src?.text || `Choice ${i+1}`);
+                  const isCorrect = !!src.correct;
+                  newChoices.push({ content: isCorrect ? "✅ Correct answer" : `Wrong answer ${i+1}`, correct: isCorrect });
+                  if (isCorrect) usedCorrectIndex = i;
+                } else {
+                  // fill missing with placeholder
+                  newChoices.push({ content: `Wrong answer ${i+1}`, correct: false });
+                }
+              }
+              // if none flagged correct, mark last as correct
+              if (!newChoices.some(c => c.correct)) {
+                newChoices[newChoices.length - 1].correct = true;
+                newChoices[newChoices.length - 1].content = "✅ Correct answer";
+              } else {
+                // ensure only one correct: if multiple, keep the first correct and unset others
+                let found = false;
+                for (let i = 0; i < newChoices.length; i++) {
+                  if (newChoices[i].correct) {
+                    if (!found) { found = true; newChoices[i].content = "✅ Correct answer"; }
+                    else { newChoices[i].correct = false; newChoices[i].content = `Wrong answer ${i+1}`; }
+                  }
+                }
+              }
+            } else {
+              // No existing choices -> create 3 wrong + 1 correct
+              newChoices = [
+                { content: "Wrong answer 1", correct: false },
+                { content: "Wrong answer 2", correct: false },
+                { content: "Wrong answer 3", correct: false },
+                { content: "✅ Correct answer", correct: true }
+              ];
+            }
+          } catch (e) {
+            // fallback
+            newChoices = [
+              { content: "Wrong answer 1", correct: false },
+              { content: "Wrong answer 2", correct: false },
+              { content: "Wrong answer 3", correct: false },
+              { content: "✅ Correct answer", correct: true }
+            ];
+          }
+
+          // Build a fresh widget with the new choices
+          const radioWidget = {
+            type: "radio",
+            options: {
+              choices: newChoices.map(c => ({ content: c.content, correct: !!c.correct }))
+            }
+          };
+
+          // Replace question content with the real question and inject our radio widget
+          // Use the original question text as-is (keeps the actual question)
+          itemData.question.content = (questionText || "Question") + ` [[☃ radio 1]]`;
+          itemData.question.widgets = {
+            "radio 1": radioWidget
+          };
+
+          // turn off heavy answer areas if present (keep behavior from before)
           itemData.answerArea = {
             calculator: false,
             chi2Table: false,
             periodicTable: false,
             tTable: false,
             zTable: false
-          };
-
-          // Add one correct answer choice
-          itemData.question.content = "Question! Question?" + `[[☃ radio 1]]`;
-          itemData.question.widgets = {
-            "radio 1": {
-              type: "radio",
-              options: {
-                choices: [{ content: "✅ Correct Choice", correct: true }]
-              }
-            }
           };
 
           responseObj.data.assessmentItem.item.itemData = JSON.stringify(itemData);
@@ -171,7 +267,10 @@ function setupMain() {
           });
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      // parsing/modify error - silently continue and return originalResponse below
+      console.error("Khan Destroyer modify error:", e);
+    }
 
     return originalResponse;
   };
