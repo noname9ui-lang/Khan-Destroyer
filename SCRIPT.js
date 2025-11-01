@@ -163,7 +163,35 @@ function setupMain() {
 
     return originalResponse;
   };
-  
+
+  // Removed auto clicker — now user must click manually
+  /*
+  (async () => {
+    const selectors = [
+      `[data-testid="choice-icon__library-choice-icon"]`,
+      `[data-testid="exercise-check-answer"]`,
+      `[data-testid="exercise-next-question"]`,
+      `._1udzurba`,
+      `._awve9b`
+    ];
+    
+    window.khanwareDominates = true;
+    
+    while (window.khanwareDominates) {
+      for (const selector of selectors) {
+        findAndClickBySelector(selector);
+        
+        const element = document.querySelector(`${selector}> div`);
+        if (element?.innerText === "Mostrar resumo") {
+          sendToast("🎉｜Exercise completed!", 3000);
+        }
+      }
+      await delay(1000); 
+    }
+  })();
+  */
+}
+
 if (!/^https?:\/\/([a-z0-9-]+\.)?khanacademy\.org/.test(window.location.href)) {
   window.location.href = "https://pt.khanacademy.org/";
 } else {
