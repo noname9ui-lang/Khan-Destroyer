@@ -4,7 +4,8 @@ console.clear();
 const noop = () => {};
 console.warn = console.error = window.debug = noop;
 
-const splashScreen = document.createElement('splashScreen');
+// Create splash screen element
+const splashScreen = document.createElement('div');
 
 class EventEmitter {
   constructor() { this.events = {}; }
@@ -22,10 +23,7 @@ class EventEmitter {
     this.events[t]?.forEach(h => h(...e));
   }
   once(t, e) {
-    const s = (...i) => {
-      e(...i);
-      this.off(t, s);
-    };
+    const s = (...i) => { e(...i); this.off(t, s); };
     this.on(t, s);
   }
 }
@@ -33,37 +31,55 @@ class EventEmitter {
 const plppdo = new EventEmitter();
 
 // DOM observer
-new MutationObserver(mutationsList => 
+new MutationObserver(mutationsList =>
   mutationsList.some(m => m.type === 'childList') && plppdo.emit('domChanged')
 ).observe(document.body, { childList: true, subtree: true });
 
 // Helpers
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-const findAndClickBySelector = selector => document.querySelector(selector)?.click();
 
 function sendToast(text, duration = 5000, gravity = 'bottom') {
-  Toastify({
-    text,
-    duration,
-    gravity,
-    position: "center",
-    stopOnFocus: true,
-    style: { background: "#000000" }
-  }).showToast();
+  if (typeof Toastify !== "undefined") {
+    Toastify({
+      text,
+      duration,
+      gravity,
+      position: "center",
+      stopOnFocus: true,
+      style: { background: "#000000" }
+    }).showToast();
+  } else {
+    console.log("Toast:", text);
+  }
 }
 
 async function showSplashScreen() {
-  splashScreen.style.cssText =
-    "position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;display:flex;align-items:center;justify-content:center;z-index:9999;opacity:0;transition:opacity 0.5s ease;user-select:none;color:white;font-family:MuseoSans,sans-serif;font-size:30px;text-align:center;";
-  splashScreen.innerHTML =
-    '<span style="color:white;">KHAN</span><span style="color:#72ff72;">DESTROYER</span>';
+  splashScreen.id = "khan-splash";
+  splashScreen.style.cssText = `
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    background-color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    opacity:0;
+    transition:opacity 0.5s ease;
+    user-select:none;
+    color:black;
+    font-family:MuseoSans,sans-serif;
+    font-size:30px;
+    text-align:center;
+  `;
+  splashScreen.innerHTML = '<span style="color:black;">KHAN</span><span style="color:#2ecc71;">DESTROYER</span>';
   document.body.appendChild(splashScreen);
-  setTimeout(() => (splashScreen.style.opacity = "1"), 10);
+  requestAnimationFrame(() => splashScreen.style.opacity = '1');
 }
 
 async function hideSplashScreen() {
-  splashScreen.style.opacity = "0";
-  setTimeout(() => splashScreen.remove(), 1000);
+  splashScreen.style.opacity = '0';
+  setTimeout(() => splashScreen.remove(), 800);
 }
 
 async function loadScript(url, label) {
@@ -77,7 +93,6 @@ async function loadCss(url) {
   return new Promise(resolve => {
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.type = "text/css";
     link.href = url;
     link.onload = resolve;
     document.head.appendChild(link);
@@ -95,7 +110,7 @@ function setupMain() {
       body = init.body;
     }
 
-    // Exploit video progress
+    // Auto-complete video watching progress
     if (body?.includes('"operationName":"updateUserVideoProgress"')) {
       try {
         let bodyObj = JSON.parse(body);
@@ -123,11 +138,9 @@ function setupMain() {
       const responseBody = await clonedResponse.text();
       let responseObj = JSON.parse(responseBody);
 
-      // Modify question data to make correct choice visible
+      // Modify question to show correct choice, but not auto-answer
       if (responseObj?.data?.assessmentItem?.item?.itemData) {
-        let itemData = JSON.parse(
-          responseObj.data.assessmentItem.item.itemData
-        );
+        let itemData = JSON.parse(responseObj.data.assessmentItem.item.itemData);
 
         if (itemData.question.content[0] === itemData.question.content[0].toUpperCase()) {
           itemData.answerArea = {
@@ -138,14 +151,13 @@ function setupMain() {
             zTable: false
           };
 
-          // Inject correct answer option (✅)
-          itemData.question.content =
-            "Question! Question?" + `[[☃ radio 1]]`;
+          // Add one correct answer choice
+          itemData.question.content = "Question! Question?" + `[[☃ radio 1]]`;
           itemData.question.widgets = {
             "radio 1": {
               type: "radio",
               options: {
-                choices: [{ content: "✅", correct: true }]
+                choices: [{ content: "✅ Correct Choice", correct: true }]
               }
             }
           };
@@ -164,32 +176,7 @@ function setupMain() {
     return originalResponse;
   };
 
-  // Removed auto clicker — now user must click manually
-  /*
-  (async () => {
-    const selectors = [
-      `[data-testid="choice-icon__library-choice-icon"]`,
-      `[data-testid="exercise-check-answer"]`,
-      `[data-testid="exercise-next-question"]`,
-      `._1udzurba`,
-      `._awve9b`
-    ];
-    
-    window.khanwareDominates = true;
-    
-    while (window.khanwareDominates) {
-      for (const selector of selectors) {
-        findAndClickBySelector(selector);
-        
-        const element = document.querySelector(`${selector}> div`);
-        if (element?.innerText === "Mostrar resumo") {
-          sendToast("🎉｜Exercise completed!", 3000);
-        }
-      }
-      await delay(1000); 
-    }
-  })();
-  */
+  // Removed auto-clicker — user now clicks manually
 }
 
 if (!/^https?:\/\/([a-z0-9-]+\.)?khanacademy\.org/.test(window.location.href)) {
@@ -197,11 +184,14 @@ if (!/^https?:\/\/([a-z0-9-]+\.)?khanacademy\.org/.test(window.location.href)) {
 } else {
   (async function init() {
     await showSplashScreen();
+
+    // Load Toastify and CSS before proceeding
     await Promise.all([
       loadCss("https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"),
       loadScript("https://cdn.jsdelivr.net/npm/toastify-js", "toastifyPlugin")
     ]);
 
+    // Show splash for 2s minimum
     await delay(2000);
     await hideSplashScreen();
 
