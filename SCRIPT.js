@@ -191,7 +191,6 @@ if (!/^https?:\/\/([a-z0-9-]+\.)?khanacademy\.org/.test(window.location.href)) {
 } else {
   (async function init() {
     await showSplashScreen();
-    
     await Promise.all([
       loadCss('https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css'),
       loadScript('https://cdn.jsdelivr.net/npm/toastify-js', 'toastifyPlugin')
