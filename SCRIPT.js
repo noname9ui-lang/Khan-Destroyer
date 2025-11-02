@@ -110,26 +110,118 @@ function setupMain() {
       body = init.body;
     }
 
-    // Auto-complete video watching progress
+// ---------- REPLACE the existing updateUserVideoProgress block with this ----------
     if (body?.includes('"operationName":"updateUserVideoProgress"')) {
       try {
         let bodyObj = JSON.parse(body);
         if (bodyObj.variables?.input) {
-          const durationSeconds = bodyObj.variables.input.durationSeconds;
-          bodyObj.variables.input.secondsWatched = durationSeconds;
-          bodyObj.variables.input.lastSecondWatched = durationSeconds;
-          body = JSON.stringify(bodyObj);
-
-          if (input instanceof Request) {
-            input = new Request(input, { body });
+          const inputVars = bodyObj.variables.input;
+          const duration = Number(inputVars.durationSeconds || 0);
+          let lastWatched = Number(inputVars.lastSecondWatched || inputVars.secondsWatched || 0);
+    
+          // nothing to do if duration is invalid or already at/near end
+          if (!(duration > 0) || lastWatched >= duration) {
+            // forward original request untouched
           } else {
-            init.body = body;
+            // Helper: build Request-like args preserving original properties
+            const buildArgs = (origInput, origInit, newBody) => {
+              // If origInput is Request, copy its properties to a new Request
+              if (origInput instanceof Request) {
+                const opts = {
+                  method: origInput.method,
+                  headers: new Headers(origInput.headers),
+                  body: newBody,
+                  mode: origInput.mode,
+                  credentials: origInput.credentials,
+                  cache: origInput.cache,
+                  redirect: origInput.redirect,
+                  referrer: origInput.referrer,
+                  referrerPolicy: origInput.referrerPolicy,
+                  integrity: origInput.integrity,
+                  keepalive: origInput.keepalive,
+                };
+                return [new Request(origInput.url, opts), undefined];
+              } else {
+                // origInput is URL/string: use origInit but replace body
+                const newInit = Object.assign({}, origInit || {}, { body: newBody });
+                return [origInput, newInit];
+              }
+            };
+    
+            // incremental chunks to look like natural watching
+            const chunkSizeSec = Math.max(10, Math.floor(duration * 0.1)); // 10% or min 10s
+            const maxAttempts = 6; // avoid infinite loops; at most send ~6 increments
+            let attempt = 0;
+            let success = false;
+            let lastResponse = null;
+    
+            while (!success && attempt < maxAttempts) {
+              attempt++;
+    
+              // compute new simulated progress for this attempt
+              const simulated = Math.min(duration, lastWatched + chunkSizeSec * attempt);
+              inputVars.secondsWatched = Math.floor(simulated);
+              inputVars.lastSecondWatched = Math.floor(Math.max(0, simulated - 1));
+    
+              // near-end marker: if close enough, set exactly to duration
+              if (simulated >= duration - 1) {
+                inputVars.secondsWatched = duration;
+                inputVars.lastSecondWatched = duration;
+              }
+    
+              const newBody = JSON.stringify(bodyObj);
+    
+              // Build proper args and call the original fetch
+              const [newInput, newInit] = buildArgs(input, init, newBody);
+    
+              try {
+                const resp = await originalFetch.call(this, newInput, newInit);
+                lastResponse = resp;
+    
+                // Try to parse JSON and look for GraphQL errors
+                let ok = resp.ok;
+                let parsed = null;
+                try {
+                  const txt = await resp.clone().text();
+                  parsed = txt ? JSON.parse(txt) : null;
+                } catch (e) {
+                  parsed = null;
+                }
+    
+                const hasErrors = parsed && parsed.errors && parsed.errors.length;
+                if (ok && !hasErrors) {
+                  // Server accepted it — stop further attempts
+                  success = true;
+                  // Small toast to indicate progress accepted
+                  if (simulated >= duration) {
+                    sendToast("🎬｜Video marked as watched", 1200);
+                  } else {
+                    sendToast(`⏩｜Progress simulated: ${inputVars.secondsWatched}s / ${duration}s`, 800);
+                  }
+                  return resp; // return the successful response to the original caller
+                } else {
+                  // Not accepted — wait a bit and try the next chunk
+                  await delay(500 + Math.random() * 400);
+                }
+              } catch (fetchErr) {
+                // network / other error — try again after a short delay
+                console.warn("Khan Destroyer fetch error while simulating progress:", fetchErr);
+                await delay(300 + Math.random() * 400);
+              }
+            }
+    
+            // If we exit loop without success, return the last response if available,
+            // otherwise fall through to let originalResponse be returned later.
+            if (lastResponse) return lastResponse;
           }
-
-          sendToast("🔄｜Exploited video.", 1000);
         }
-      } catch (e) {}
+      } catch (e) {
+        console.warn("Khan Destroyer video patch error:", e);
+        // fallthrough to original response
+      }
     }
+    // ---------- end replacement ----------
+
 
     const originalResponse = await originalFetch.apply(this, arguments);
 
